@@ -3,9 +3,9 @@ var startBtn = document.querySelector('.start');
 var text = document.querySelector('.questions');
 var timerElement = document.querySelector('.timer');
 let timer;
-let timerInterval;
+let timerInterval = 1000;
 let timeRemaining = 130;
-let incorrectAnswers = 0;
+let incorrectAnswers = 20;
 
 // Adds event listener for startBtn
 startBtn.addEventListener('click', startQuiz);
@@ -108,44 +108,59 @@ function startQuiz(){
         }
     }
     // function to handle user input
-    function handleOptionsSelection(event){
+    function handleOptionsSelection(event) {
         var selectedOption = event.target.textContent;
-         // get the current question
-         var currentQuestion = quizQuestions[currentQuestionIndex];
-
-    if(curentQuestionIndex < quizQuestions.length) {
-        var currentQuestion = quizQuestions[currentQuestionIndex];
-          // check if the selected option is correct
+      
+        // Check if currentQuestionIndex is within the valid range
+        if (currentQuestionIndex < quizQuestions.length) {
+          var currentQuestion = quizQuestions[currentQuestionIndex];
+      
           if (selectedOption === currentQuestion.option[currentQuestion.answer]) {
-    
-
-
-    // correct answer
-    // proceed to the next question
-    currentQuestionIndex++;
-    if (currentQuestionIndex < quizQuestions.length) {
-      displayQuestion(currentQuestionIndex);
-    } else {
-
-      // reached the end of the quiz
-      // display the final score or redirect to the next page
-      // Add your code here to handle the end of the quiz
-    }
-  } else {       
-     incorrectAnswers++;
-     // subtracts twenty seconds for each incorrect answer
-     timeRemaining -= 20; }
-
-    // Add your code here to deduct time from the timer
-    // proceed to the next question
-    currentQuestionIndex++;
-    if (currentQuestionIndex < quizQuestions.length) {
-      displayQuestion(currentQuestionIndex);
-    } else {
-      // reached the end of the quiz
-      // display the final score or redirect to the next page
-      // Add your code here to handle the end of the quiz
+            // Correct answer
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+              displayQuestion(currentQuestionIndex);
+            } else {
+              // Reached the end of the quiz
+              endQuiz();
+            }
+          } else {
+            incorrectAnswers++;
+            timeRemaining -= 20;
+          }
+        }
       }
+    // function to handle the end of the quiz
+ function endQuiz() {
+     // Stop the timer
+    clearInterval(timerInterval);
+
+    // Calculate the number of correct answers
+    var correctAnswers = quizQuestions.length - incorrectAnswers;
+
+    // Calculate the user's score
+    var score = correctAnswers + timeRemaining;
+
+    // Display the results
+    var resultsElement = document.querySelector('.results');
+    resultsElement.textContent = `Correct Answers: ${correctAnswers} | Incorrect Answers: ${incorrectAnswers} | Score: ${score}`;
+
+    // Save the score locally
+    localStorage.setItem('score', score);
+
+    // Remove the last question
+    var questionElement = document.querySelector('.questions');
+    questionElement.textContent = '';
+
+    // Create a text box for the user to enter initials
+    var initialsInput = document.createElement('input');
+    initialsInput.setAttribute('type', 'text');
+    initialsInput.setAttribute('placeholder', 'Enter your initials');
+    questionElement.appendChild(initialsInput);
+
+    // Display the highest score next to its respective HTML element
+    var highestScoreElement = document.querySelector('.highest-score');
+    var highestScore = localStorage.getItem('score');
+    highestScoreElement.textContent = `Highest Score: ${highestScore}`;
     }
-  }
-    
+      
