@@ -3,13 +3,18 @@ var startBtn = document.querySelector('.start');
 var text = document.querySelector('.questions');
 var timerElement = document.querySelector('.timer');
 let timer;
-let timerInterval = 1000;
+let timeInterval;
 let timeRemaining = 130;
-let incorrectAnswers = 20;
-
+let incorrectAnswers = 0;
+let pastScore = window.localStorage.getItem('score')
+console.log(pastScore)
 // Adds event listener for startBtn
-startBtn.addEventListener('click', startQuiz);
 
+startBtn.addEventListener('click', startQuiz);
+if(pastScore) {
+var highestScoreElement = document.querySelector('.Highscore');
+highestScoreElement.textContent = `Highest Score: ${pastScore}`;
+}
 var quizQuestions = [
     {
       question: "What is the correct way to write a comment in JavaScript?",
@@ -68,6 +73,7 @@ var quizQuestions = [
 function startQuiz(){  
     // displays fisrt question
     displayQuestion(currentQuestionIndex);
+    timerInterval = setInterval(updateTimer, 1000);
     // hides startBtn
     startBtn.style.display = 'none';
 }
@@ -77,7 +83,7 @@ function startQuiz(){
         // get the question and options from the Quiz Questions array
         var question = quizQuestions[questionIndex].question;
         var option = quizQuestions[questionIndex].option;
-        timerInterval = setInterval(updateTimer, 1000);
+
 
         var questionElement = document.querySelector('.questions');
         questionElement.textContent = question;
@@ -103,7 +109,6 @@ function startQuiz(){
         timeRemaining--;
 
         if(timeRemaining <= 0){
-            clearInterval(timerInterval);
             endQuiz();
         }
     }
@@ -117,17 +122,18 @@ function startQuiz(){
       
           if (selectedOption === currentQuestion.option[currentQuestion.answer]) {
             // Correct answer
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizQuestions.length) {
+            
+          } else {
+            incorrectAnswers++;
+            timeRemaining -= 20;
+          }
+          currentQuestionIndex++;
+          if (currentQuestionIndex < quizQuestions.length) {
               displayQuestion(currentQuestionIndex);
             } else {
               // Reached the end of the quiz
               endQuiz();
             }
-          } else {
-            incorrectAnswers++;
-            timeRemaining -= 20;
-          }
         }
       }
     // function to handle the end of the quiz
@@ -146,20 +152,24 @@ function startQuiz(){
     resultsElement.textContent = `Correct Answers: ${correctAnswers} | Incorrect Answers: ${incorrectAnswers} | Score: ${score}`;
 
     // Save the score locally
-    localStorage.setItem('score', score);
+    localStorage.setItem('score', parseInt(score));
+
 
     // Remove the last question
     var questionElement = document.querySelector('.questions');
     questionElement.textContent = '';
+    var answerElement = document.querySelector(".answers");
+    answerElement.textContent = '';
 
     // Create a text box for the user to enter initials
+    enterBtn.addEventListener('click',initialsInput);
     var initialsInput = document.createElement('input');
     initialsInput.setAttribute('type', 'text');
     initialsInput.setAttribute('placeholder', 'Enter your initials');
     questionElement.appendChild(initialsInput);
 
     // Display the highest score next to its respective HTML element
-    var highestScoreElement = document.querySelector('.highest-score');
+    var highestScoreElement = document.querySelector('.Highscore');
     var highestScore = localStorage.getItem('score');
     highestScoreElement.textContent = `Highest Score: ${highestScore}`;
     }
