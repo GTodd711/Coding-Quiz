@@ -2,10 +2,16 @@
 
 ## User Interface
 
-This quiz is a five question quiz with a time limit of two minutes, upon opening the page you will see a start button and above it "Let's take a coding quiz!" in the top right you will see a timer and in the top left a highscore, upon pressing start you will be given the first question. The goal of this quiz is to get as many correct answers as possible with as much time remaing as possible. for every incorrect answer you will be docked 20 seconds, if you dont complete it within the time limit you will have however many correct answers minus the ones you missed giving you youre total.
+This quiz is a five question quiz with a time limit of two minutes, upon opening the page you will see a start button and above it "Let's take a coding quiz!" in the top right you will see a timer and in the top left a highscore, upon pressing start you will be given the first question. The goal of this quiz is to get as many correct answers as possible with as much time remaing as possible. for every incorrect answer you will be docked 20 seconds, if you dont complete it within the time limit you will have however many correct answers minus the ones you missed giving you your total.
 
-## download
+![starting page](./Coding%20Quiz.pdf)
+
+## Download
 
 this page can not be downloaded.
 
+## Credits
 
+W3schools
+Stack Overflow
+Xpert Learning assitant
